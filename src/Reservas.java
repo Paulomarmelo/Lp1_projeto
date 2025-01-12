@@ -1,35 +1,37 @@
-public class Reservas {
-    private String nome;
-    private int quantPessoas;
-    private int tempoChegada;
+public class Reservas   {
+    private String nomeReserva;
+    private int numPessoas;
+    private int ChegadaUT;
 
-    public Reservas(String nome, int quantPessoas, int tempoChegada) {
-        this.nome = nome;
-        this.quantPessoas = quantPessoas;
-        this.tempoChegada = tempoChegada;
+    public Reservas(String nomeReserva, int numPessoas, int ChegadaUT) {
+        this.nomeReserva = nomeReserva;
+        this.numPessoas = numPessoas;
+        this.ChegadaUT = ChegadaUT;
     }
 
-    public String getNome() {
-        return nome;
+    public String getNomeReserva() {
+        return nomeReserva;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setNomeReserva(String nomeReserva) {
+        this.nomeReserva = nomeReserva;
     }
 
-    public int getQuantPessoas() {
-        return quantPessoas;
+    public int getNumPessoas() {
+        return numPessoas;
     }
 
-    public void setQuantPessoas(int quantPessoas) {
-        this.quantPessoas = quantPessoas;
+    public void setNumPessoas(int numPessoas) {
+        this.numPessoas = numPessoas;
     }
 
-    public int getTempoChegada() {
-        return tempoChegada;
+    public int getChegadaUT() {
+        return ChegadaUT;
     }
 
-    public void setTempoChegada(int tempoChegada) {
-        this.tempoChegada = tempoChegada;
+    public void setChegadaUT(int chegadaUT) {
+        this.ChegadaUT = chegadaUT;
     }
+
+
 }
