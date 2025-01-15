@@ -17,7 +17,7 @@ public class LeitorClientes {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String linha;
             while ((linha = br.readLine()) != null) {
-                // Divide a linha usando vírgulas como delimitadores
+
                 String[] dados = linha.split(",");
 
                 // Cria um objeto Clientes a partir dos dados lidos
