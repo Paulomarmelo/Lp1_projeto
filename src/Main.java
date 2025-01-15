@@ -4,9 +4,14 @@ public class Main {
         // Caminho do ficheiro
         String filePath = "C:\\Users\\pjtug\\Desktop\\GIT_repos\\ProjetoLp1\\src\\Clientes.txt";
 
+        String filePath1 = "C:\\Users\\pjtug\\Desktop\\GIT_repos\\ProjetoLp1\\src\\Pratos.txt";
+
         // Carregar os clientes do ficheiro usando a classe LeitorClientes
         Clientes[] clientes = LeitorClientes.lerClientesDoFicheiro(filePath);
         int numeroClientes = clientes.length;
+
+        Prato[] pratos = LeitorPratos.lerPratosDoFicheiro(filePath1);
+        int numeroPratos  = pratos.length;
 
         String[] nomes = new String[numeroClientes];
         int[] numPessoas = new int[numeroClientes];
@@ -28,41 +33,50 @@ public class Main {
             chegadaUT[i] = cliente.getChegadaUT();
         }
 
+        String[] nomePrato = new String[numeroPratos];
+        double[] precosCusto = new double[numeroPratos];
+        String[] categorias = new String[numeroPratos];
+        double[] precosVenda = new double[numeroPratos];
+        int[] temposPreparo = new int[numeroPratos];
+        boolean[] disponiveis = new boolean[numeroPratos];
 
-                Scanner scanner = new Scanner(System.in);
-                Prato[] pratos = new Prato[10]; // Array fixo para até 10 pratos
+        for (int i = 0; i < numeroPratos; i++) {
+            Prato prato = pratos[i]; // Obtemos o prato atual do array
 
-                // Pré-carregar pratos
-                pratos[0] = new Prato("Pão de alho", 1.40, "Entrada", 3.00, 1, true);
-                pratos[1] = new Prato("Bacalhau com natas", 3.40, "Principal", 9.99, 3, true);
-                pratos[2] = new Prato("Francesinha de frango", 4.50, "Principal", 11.00, 2, false);
-                pratos[3] = new Prato("Francesinha de porco com ovo", 5.90, "Principal", 12.50, 2, true);
-                pratos[4] = new Prato("Gelado de nata", 1.10, "Sobremesa", 3.00, 1, true);
-                pratos[5] = new Prato("Bolo de bolacha", 2.10, "Sobremesa", 3.50, 2, true);
-                int numeroPratos = 6; // Número inicial de pratos carregados
+            nomePrato[i] = prato.getNomePrato();
+            precosCusto[i] = prato.getPrecoCusto();
+            categorias[i] = prato.getCategoria();
+            precosVenda[i] = prato.getPrecoVenda();
+            temposPreparo[i] = prato.getTempoPreparo();
+            disponiveis[i] = prato.isDisponivel();
+        }
 
+
+
+
+        Scanner scanner = new Scanner(System.in);
                 boolean sair = false;
 
                 while (!sair) {
                     System.out.println("\n====== Menu de Pratos ======");
-                    System.out.println("1. Listar Pratos");
+                    System.out.println("1. Listar Pratos.txt");
                     System.out.println("2. Alterar Disponibilidade de um Prato");
                     System.out.println("3. Sair");
                     System.out.print("Escolha uma opção: ");
 
                     int opcao = scanner.nextInt();
-                    scanner.nextLine(); // Consumir a nova linha
+                    scanner.nextLine();
 
                     switch (opcao) {
                         case 1:
                             if (numeroPratos == 0) {
                                 System.out.println("Nenhum prato cadastrado.");
                             } else {
-                                System.out.println("\nLista de Pratos:");
+                                System.out.println("\nLista de Pratos.txt:");
                                 for (int i = 0; i < numeroPratos; i++) {
                                     Prato prato = pratos[i];
                                     System.out.printf("Prato %d: Nome: %s | Categoria: %s | Preço de Custo: %.2f | Preço de Venda: %.2f | Tempo de Preparo: %d minutos | Disponível: %s\n",
-                                            i + 1, prato.getNome(), prato.getCategoria(),
+                                            i + 1, prato.getNomePrato(), prato.getCategoria(),
                                             prato.getPrecoCusto(), prato.getPrecoVenda(),
                                             prato.getTempoPreparo(), (prato.isDisponivel() ? "Sim" : "Não"));
                                 }
