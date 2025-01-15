@@ -54,34 +54,68 @@ public class Main {
 
 
 
-        Scanner scanner = new Scanner(System.in);
+                Scanner scanner = new Scanner(System.in);
+
                 boolean sair = false;
 
-                while (!sair) {
-                    System.out.println("\n====== Menu de Pratos ======");
-                    System.out.println("1. Listar Pratos.txt");
-                    System.out.println("2. Alterar Disponibilidade de um Prato");
-                    System.out.println("3. Sair");
-                    System.out.print("Escolha uma opção: ");
+        // Menu inicial
+        while (!sair) {
+            System.out.println("\n====== Ritotech ======");
+            System.out.println("1. Começar o Dia");
+            System.out.println("2. Sair");
+            System.out.print("Escolha uma opção: ");
 
-                    int opcao = scanner.nextInt();
-                    scanner.nextLine();
+            int opcaoInicial = scanner.nextInt();
+            scanner.nextLine(); // Consumir a nova linha
 
-                    switch (opcao) {
-                        case 1:
-                            if (numeroPratos == 0) {
-                                System.out.println("Nenhum prato cadastrado.");
-                            } else {
-                                System.out.println("\nLista de Pratos.txt:");
-                                for (int i = 0; i < numeroPratos; i++) {
-                                    Prato prato = pratos[i];
-                                    System.out.printf("Prato %d: Nome: %s | Categoria: %s | Preço de Custo: %.2f | Preço de Venda: %.2f | Tempo de Preparo: %d minutos | Disponível: %s\n",
-                                            i + 1, prato.getNomePrato(), prato.getCategoria(),
-                                            prato.getPrecoCusto(), prato.getPrecoVenda(),
-                                            prato.getTempoPreparo(), (prato.isDisponivel() ? "Sim" : "Não"));
-                                }
-                            }
-                            break;
+            switch (opcaoInicial) {
+                case 1:
+                    // Entrar no menu de pratos
+                    menuPratos(scanner, pratos, numeroPratos);
+                    break;
+
+                case 2:
+                    System.out.println("Encerrando o sistema. Até logo!");
+                    sair = true;
+                    break;
+
+                default:
+                    System.out.println("Opção inválida. Por favor, tente novamente.");
+                    break;
+            }
+        }
+
+        scanner.close();
+    }
+
+    public static void menuPratos(Scanner scanner, Prato[] pratos, int numeroPratos) {
+        boolean sair = false;
+
+        while (!sair) {
+            System.out.println("\n====== Menu de Pratos ======");
+            System.out.println("1. Listar Pratos");
+            System.out.println("2. Alterar Disponibilidade de um Prato");
+            System.out.println("3. Sair");
+            System.out.print("Escolha uma opção: ");
+
+            int opcao = scanner.nextInt();
+            scanner.nextLine(); // Consumir a nova linha
+
+            switch (opcao) {
+                case 1:
+                    if (numeroPratos == 0) {
+                        System.out.println("Nenhum prato cadastrado.");
+                    } else {
+                        System.out.println("\nLista de Pratos:");
+                        for (int i = 0; i < numeroPratos; i++) {
+                            Prato prato = pratos[i];
+                            System.out.printf("Prato %d: Nome: %s | Categoria: %s | Preço de Custo: %.2f | Preço de Venda: %.2f | Tempo de Preparo: %d minutos | Disponível: %s\n",
+                                    i + 1, prato.getNomePrato(), prato.getCategoria(),
+                                    prato.getPrecoCusto(), prato.getPrecoVenda(),
+                                    prato.getTempoPreparo(), (prato.isDisponivel() ? "Sim" : "Não"));
+                        }
+                    }
+                    break;
 
                         case 2:
                             if (numeroPratos == 0) {
