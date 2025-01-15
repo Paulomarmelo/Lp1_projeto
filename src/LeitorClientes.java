@@ -17,18 +17,17 @@ public class LeitorClientes {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String linha;
             while ((linha = br.readLine()) != null) {
-                // Divide a linha usando vírgulas como delimitadores
+
                 String[] dados = linha.split(",");
 
-                // Cria um objeto Clientes a partir dos dados lidos
                 Clientes cliente = new Clientes(
                         dados[0], // nomeReserva
-                        Integer.parseInt(dados[1]), // numPessoas
-                        Integer.parseInt(dados[2]), // pedidosEntrada
-                        Integer.parseInt(dados[3]), // pedidosSobremesa
-                        Integer.parseInt(dados[4]), // maxUTentrar
-                        Integer.parseInt(dados[5]), // maxUTatendimento
-                        Integer.parseInt(dados[6])  // chegadaUT
+                        Integer.parseInt(dados[1]),
+                        Integer.parseInt(dados[2]),
+                        Integer.parseInt(dados[3]),
+                        Integer.parseInt(dados[4]),
+                        Integer.parseInt(dados[5]),
+                        Integer.parseInt(dados[6])
                 );
 
                 // Armazena o cliente no array
