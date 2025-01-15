@@ -18,7 +18,7 @@ public class LeitorClientes {
             String linha;
             while ((linha = br.readLine()) != null) {
 
-                String[] dados = linha.split(";,");
+                String[] dados = linha.split(",");
 
                 Clientes cliente = new Clientes(
                         dados[0], // nomeReserva

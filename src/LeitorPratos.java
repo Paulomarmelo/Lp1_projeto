@@ -15,23 +15,32 @@ public class LeitorPratos {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath1))) {
             String linha;
             while ((linha = br.readLine()) != null) {
+                // Divide a linha em partes usando vírgula ou ponto e vírgula como separador
+                String[] dados = linha.split("[,]");
 
+                // Certifica-se de que há pelo menos 6 campos
+                if (dados.length < 6) {
+                    System.err.println("Linha inválida (campos insuficientes): " + linha);
+                    continue; // Ignorar esta linha
+                }
 
-                String[] dados = linha.split(";,");
+                try {
 
+                    String nome = dados[0];
+                    double precoCusto = Double.parseDouble(dados[1]);
+                    String categoria = dados[2];
+                    double precoVenda = Double.parseDouble(dados[3]);
+                    int tempoPreparo = Integer.parseInt(dados[4]);
+                    boolean disponivel = Boolean.parseBoolean(dados[5]);
 
-                Prato prato = new Prato(
-                        dados[0], // nome
-                        Double.parseDouble(dados[1]), // precoCusto
-                        dados[2], // categoria
-                        Double.parseDouble(dados[3]), // precoVenda
-                        Integer.parseInt(dados[4]), // tempoPreparo
-                        Boolean.parseBoolean(dados[5]) // disponivel
-                );
+                    Prato prato = new Prato(nome, precoCusto, categoria, precoVenda, tempoPreparo, disponivel);
 
-                // Armazena o prato no array
-                listaPratos[contador] = prato;
-                contador++;
+                    // Armazena o prato no array
+                    listaPratos[contador] = prato;
+                    contador++;
+                } catch (NumberFormatException e) {
+                    System.err.println("Erro ao converter valores numéricos na linha: " + linha);
+                }
 
                 // Verifica se o limite do array foi atingido
                 if (contador >= listaPratos.length) {
@@ -42,6 +51,7 @@ public class LeitorPratos {
         } catch (IOException e) {
             System.err.println("Erro ao ler o arquivo: " + e.getMessage());
         }
+
 
         // Retorna o array até o número de pratos carregados
         return truncarArray(listaPratos, contador);

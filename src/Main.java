@@ -41,7 +41,7 @@ public class Main {
         boolean[] disponiveis = new boolean[numeroPratos];
 
         for (int i = 0; i < numeroPratos; i++) {
-            Prato prato = pratos[i]; // Obtemos o prato atual do array
+            Prato prato = pratos[i];
 
             nomePrato[i] = prato.getNomePrato();
             precosCusto[i] = prato.getPrecoCusto();
@@ -66,12 +66,12 @@ public class Main {
             System.out.print("Escolha uma opção: ");
 
             int opcaoInicial = scanner.nextInt();
-            scanner.nextLine(); // Consumir a nova linha
+            scanner.nextLine();
 
             switch (opcaoInicial) {
                 case 1:
-                    // Entrar no menu de pratos
-                    menuPratos(scanner, pratos, numeroPratos);
+
+                   menuPratos(scanner, pratos, numeroPratos);
                     break;
 
                 case 2:
