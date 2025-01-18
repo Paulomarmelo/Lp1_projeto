@@ -1,9 +1,10 @@
 public class GestorDiaDia {
     public void getClientes(){
 
-        String filePath = "C:\\Users\\pjtug\\Desktop\\GIT_repos\\ProjetoLp1\\src\\Clientes.txt";
+        String caminho = "C:\\Users\\pjtug\\Desktop\\GIT_repos\\ProjetoLp1\\src\\Clientes.txt";
+        String separador = "C:\\Users\\pjtug\\Desktop\\GIT_repos\\ProjetoLp1\\src\\";
 
-        Clientes[] clientes = LeitorClientes.lerClientesDoFicheiro(filePath);
+        Clientes[] clientes = LeitorClientes.lerClientesDoFicheiro(caminho, separador);
         int numeroClientes = clientes.length;
 
         String[] nomes = new String[numeroClientes];
