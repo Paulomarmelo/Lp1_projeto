@@ -46,6 +46,7 @@ public class LeitorClientes {
                     break;
                 }
             }
+
         } catch (IOException e) {
             System.err.println("Erro ao ler o arquivo: " + e.getMessage());
         }

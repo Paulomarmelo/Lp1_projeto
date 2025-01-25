@@ -5,6 +5,7 @@ public class Main {
         Definicoes definicoes = new Definicoes(
                 "C:\\Users\\pjtug\\Desktop\\GIT_repos\\ProjetoLp1\\src\\Clientes.txt",
                 "C:\\Users\\pjtug\\Desktop\\GIT_repos\\ProjetoLp1\\src\\Pratos.txt",
+                "C:\\Users\\pjtug\\Desktop\\GIT_repos\\ProjetoLp1\\src\\Reservas.txt",
                 ",",
                 20,
                 2,
@@ -15,6 +16,7 @@ public class Main {
         // Leitura inicial de clientes e pratos
         Clientes[] clientes = LeitorClientes.lerClientesDoFicheiro(definicoes.getCaminhoClientes(), definicoes.getSeparadorFicheiros());
         Prato[] pratos = LeitorPratos.lerPratosDoFicheiro(definicoes.getCaminhoPratos(), definicoes.getSeparadorFicheiros());
+        Reservas[] reservas = LeitorReservas.lerReservasDoFicheiro(definicoes.getCaminhoReservas(), definicoes.getSeparadorFicheiros());
 
 
         Scanner scanner = new Scanner(System.in); // Scanner único para o programa
