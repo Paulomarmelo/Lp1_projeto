@@ -1,14 +1,13 @@
 public class Mesa {
 
     private int id;
-    private int capacide;
+    private int capacidade;
     private boolean ocupada;
 
-
-    public Mesa(int id, int capacide, boolean ocupada) {
+    public Mesa(int id, int capacidade) {
         this.id = id;
-        this.capacide = capacide;
-        this.ocupada = ocupada;
+        this.capacidade = capacidade;
+        this.ocupada = false;
     }
 
     public int getId() {
@@ -19,12 +18,12 @@ public class Mesa {
         this.id = id;
     }
 
-    public int getCapacide() {
-        return capacide;
+    public int getCapacidade() {
+        return capacidade;
     }
 
-    public void setCapacide(int capacide) {
-        this.capacide = capacide;
+    public void setCapacidade(int capacidade) {
+        this.capacidade = capacidade;
     }
 
     public boolean isOcupada() {
