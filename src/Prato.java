@@ -1,5 +1,5 @@
 public class Prato {
-    private String nome;
+    private String nomePrato;
     private String categoria;
     private double precoCusto;
     private double precoVenda;
@@ -7,8 +7,8 @@ public class Prato {
     private boolean disponivel;
 
 
-    public Prato(String nome, double precoCusto, String categoria, double precoVenda, int tempoPreparo, boolean disponivel) {
-        this.nome = nome;
+    public Prato(String nomePrato, double precoCusto, String categoria, double precoVenda, int tempoPreparo, boolean disponivel) {
+        this.nomePrato = nomePrato;
         this.precoCusto = precoCusto;
         this.categoria = categoria;
         this.precoVenda = precoVenda;
@@ -16,12 +16,12 @@ public class Prato {
         this.disponivel = disponivel;
     }
 
-    public String getNome() {
-        return nome;
+    public String getNomePrato() {
+        return nomePrato;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setNomePrato(String nomePrato) {
+        this.nomePrato = nomePrato;
     }
 
     public String getCategoria() {
