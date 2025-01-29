@@ -13,7 +13,7 @@ public class Definicoes {
                       int unidadesTempoDia, int tempoEsperaCliente, double custoClienteNaoAtendido, String senha) {
         this.caminhoClientes = caminhoClientes;
         this.caminhoPratos = caminhoPratos;
-        this.caminhoReservas = caminhoReservas;  // Inicialização do novo campo
+        this.caminhoReservas = caminhoReservas;
         this.separadorFicheiros = separadorFicheiros;
         this.unidadesTempoDia = unidadesTempoDia;
         this.tempoEsperaCliente = tempoEsperaCliente;
@@ -101,6 +101,7 @@ public class Definicoes {
         }
         return true;
     }
+
 
     @Override
     public String toString() {
