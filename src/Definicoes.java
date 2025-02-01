@@ -2,18 +2,20 @@ public class Definicoes {
 
     private String caminhoClientes;
     private String caminhoPratos;
-    private String caminhoReservas;  // Novo campo adicionado
+    private String caminhoReservas;
+    private String caminhoMesas;  // Novo campo adicionado para mesas
     private String separadorFicheiros;
     private int unidadesTempoDia;
     private int tempoEsperaCliente;
     private double custoClienteNaoAtendido;
     private String senha;
 
-    public Definicoes(String caminhoClientes, String caminhoPratos, String caminhoReservas, String separadorFicheiros,
+    public Definicoes(String caminhoClientes, String caminhoPratos, String caminhoReservas, String caminhoMesas, String separadorFicheiros,
                       int unidadesTempoDia, int tempoEsperaCliente, double custoClienteNaoAtendido, String senha) {
         this.caminhoClientes = caminhoClientes;
         this.caminhoPratos = caminhoPratos;
         this.caminhoReservas = caminhoReservas;
+        this.caminhoMesas = caminhoMesas;  // Inicializa o novo campo
         this.separadorFicheiros = separadorFicheiros;
         this.unidadesTempoDia = unidadesTempoDia;
         this.tempoEsperaCliente = tempoEsperaCliente;
@@ -21,7 +23,7 @@ public class Definicoes {
         this.senha = senha;
     }
 
-    // Getters e Setters para clientes, pratos e reservas
+    // Getters e Setters para clientes, pratos, reservas e mesas
     public String getCaminhoClientes() { return caminhoClientes; }
 
     public void setCaminhoClientes(String caminhoClientes) { this.caminhoClientes = caminhoClientes; }
@@ -30,9 +32,13 @@ public class Definicoes {
 
     public void setCaminhoPratos(String caminhoPratos) { this.caminhoPratos = caminhoPratos; }
 
-    public String getCaminhoReservas() { return caminhoReservas; }  // Getter para o novo campo
+    public String getCaminhoReservas() { return caminhoReservas; }
 
-    public void setCaminhoReservas(String caminhoReservas) { this.caminhoReservas = caminhoReservas; }  // Setter para o novo campo
+    public void setCaminhoReservas(String caminhoReservas) { this.caminhoReservas = caminhoReservas; }
+
+    public String getCaminhoMesas() { return caminhoMesas; }  // Getter para o novo campo
+
+    public void setCaminhoMesas(String caminhoMesas) { this.caminhoMesas = caminhoMesas; }  // Setter para o novo campo
 
     public String getSeparadorFicheiros() {
         return separadorFicheiros;
@@ -102,6 +108,10 @@ public class Definicoes {
         return true;
     }
 
+    // Método para carregar mesas do arquivo
+    public Mesa[] carregarMesas() {
+        return LeitorMesas.lerMesasDoFicheiro(caminhoMesas, separadorFicheiros);
+    }
 
     @Override
     public String toString() {
@@ -109,6 +119,7 @@ public class Definicoes {
                 "caminhoClientes='" + caminhoClientes + '\'' +
                 ", caminhoPratos='" + caminhoPratos + '\'' +
                 ", caminhoReservas='" + caminhoReservas + '\'' +
+                ", caminhoMesas='" + caminhoMesas + '\'' +
                 ", separadorFicheiros='" + separadorFicheiros + '\'' +
                 ", unidadesTempoDia=" + unidadesTempoDia +
                 ", tempoEsperaCliente=" + tempoEsperaCliente +

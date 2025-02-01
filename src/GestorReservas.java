@@ -11,7 +11,6 @@ public class GestorReservas {
         }
     }
 
-
     public static void adicionarReserva(Scanner scanner, Reservas[] reservas) {
         System.out.print("Digite o nome do cliente: ");
         String nome = scanner.nextLine();
