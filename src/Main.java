@@ -19,78 +19,100 @@ public class Main {
         Reservas[] reservas = LeitorReservas.lerReservasDoFicheiro(definicoes.getCaminhoReservas(), definicoes.getSeparadorFicheiros());
 
         Scanner scanner = new Scanner(System.in);
-        boolean sair = false;
+        boolean running = true;
 
-        while (!sair) {
-            System.out.println("\n====== Ritotech ======");
-            System.out.println("1. Começar o Dia");
-            System.out.println("2. Definições");
-            System.out.println("3. Gerenciar Reservas");
-            System.out.println("4. Sair");
+        // Array de opções do menu
+        String[] opcoesMenu = {
+                "1. Gerir Mesas",
+                "2. Gerir Menus",
+                "3. Registar Pedidos",
+                "4. Consultar Estatísticas",
+                "5. Configurações",
+                "6. Iniciar Novo Dia",
+                "7. Consultar Logs",
+                "8. Sair"
+        };
+
+        while (running) {
+            // Exibir o menu
+            System.out.println("\n--- Menu Principal ---");
+            for (String opcao : opcoesMenu) {
+                System.out.println(opcao);
+            }
+
+            // Ler a escolha do usuário
             System.out.print("Escolha uma opção: ");
+            int escolha = scanner.nextInt();
+            scanner.nextLine(); // Consumir a nova linha
 
-            int opcaoInicial = scanner.nextInt();
-            scanner.nextLine();
-
-            switch (opcaoInicial) {
+            // Executar a funcionalidade correspondente
+            switch (escolha) {
                 case 1:
-                    exibirMenuPrincipal(scanner, pratos, pratos.length); // Removed GestaoMesas parameter
+                    gerirMesas(scanner);
                     break;
                 case 2:
-                    menuDefinicoes(scanner, definicoes);
-                    clientes = LeitorClientes.lerClientesDoFicheiro(definicoes.getCaminhoClientes(), definicoes.getSeparadorFicheiros());
-                    pratos = LeitorPratos.lerPratosDoFicheiro(definicoes.getCaminhoPratos(), definicoes.getSeparadorFicheiros());
-                    reservas = LeitorReservas.lerReservasDoFicheiro(definicoes.getCaminhoReservas(), definicoes.getSeparadorFicheiros());
+                    gerirMenus(scanner, pratos);
                     break;
                 case 3:
-                    menuReservas(scanner, reservas);
+                    registarPedidos(scanner);
                     break;
                 case 4:
-                    System.out.println("Encerrando o sistema. Até logo!");
-                    sair = true;
+                    consultarEstatisticas();
+                    break;
+                case 5:
+                    configurarAplicacao(scanner, definicoes);
+                    break;
+                case 6:
+                    iniciarDia();
+                    break;
+                case 7:
+                    consultarLogs();
+                    break;
+                case 8:
+                    sair();
+                    running = false;
                     break;
                 default:
-                    System.out.println("Opção inválida. Por favor, tente novamente.");
+                    System.out.println("Opção inválida. Tente novamente.");
             }
         }
+
         scanner.close();
     }
 
-    private static void menuReservas(Scanner scanner, Reservas[] reservas) {
-        boolean sair = false;
-        while (!sair) {
-            System.out.println("\n====== Gerenciar Reservas ======");
-            System.out.println("1. Listar Reservas");
-            System.out.println("2. Adicionar Reserva");
-            System.out.println("3. Remover Reserva");
-            System.out.println("4. Voltar");
-            System.out.print("Escolha uma opção: ");
-
-            int opcao = scanner.nextInt();
-            scanner.nextLine();
-
-            switch (opcao) {
-                case 1:
-                    GestorReservas.listarReservas(reservas);
-                    break;
-                case 2:
-                    GestorReservas.adicionarReserva(scanner, reservas);
-                    break;
-                case 3:
-                    GestorReservas.removerReserva(scanner, reservas);
-                    break;
-                case 4:
-                    sair = true;
-                    break;
-                default:
-                    System.out.println("Opção inválida. Por favor, tente novamente.");
-            }
-        }
+    private static void gerirMesas(Scanner scanner) {
+        System.out.println("Gestão de Mesas ainda não implementada.");
     }
 
+    private static void gerirMenus(Scanner scanner, Prato[] pratos) {
+        menuPratos(scanner, pratos, pratos.length);
+    }
 
+    private static void registarPedidos(Scanner scanner) {
+        System.out.println("Registo de Pedidos ainda não implementado.");
+    }
 
-    public static void menuDefinicoes(Scanner scanner, Definicoes definicoes) {
+    private static void consultarEstatisticas() {
+        System.out.println("Consulta de Estatísticas ainda não implementada.");
+    }
+
+    private static void configurarAplicacao(Scanner scanner, Definicoes definicoes) {
+        menuDefinicoes(scanner, definicoes);
+    }
+
+    private static void iniciarDia() {
+        System.out.println("Iniciar Novo Dia ainda não implementado.");
+    }
+
+    private static void consultarLogs() {
+        System.out.println("Consulta de Logs ainda não implementada.");
+    }
+
+    private static void sair() {
+        System.out.println("Encerrando o sistema. Até logo!");
+    }
+
+    private static void menuDefinicoes(Scanner scanner, Definicoes definicoes) {
         System.out.print("Insira a senha para acessar as configurações: ");
         String senha = scanner.nextLine();
 
@@ -205,48 +227,6 @@ public class Main {
         }
     }
 
-
-    private static void exibirMenuPrincipal(Scanner scanner, Prato[] pratos, int numeroPratos) { // Removed GestaoMesas parameter
-        while (true) {
-            System.out.println("\nGestão de Restaurante");
-            System.out.println("1. Gerir Mesas");
-            System.out.println("2. Gerir Menus");
-            System.out.println("3. Gerir Dia-a-Dia");
-            System.out.println("4. Consultar Estatísticas");
-            System.out.println("5. Configurações");
-            System.out.println("6. Sair");
-            System.out.print("Escolha uma opção: ");
-
-            int opcao = scanner.nextInt();
-            scanner.nextLine(); // Consumir a nova linha
-
-            switch (opcao) {
-                case 1:
-                    // gestaoMesas.exibirMenuMesas(scanner); // Uncomment if you have a GestaoMesas class
-                    System.out.println("Gestão de Mesas ainda não implementada.");
-                    break;
-                case 2:
-                    menuPratos(scanner, pratos, numeroPratos);
-                    break;
-                case 3:
-
-                    break;
-                case 4:
-                    System.out.println("Consulta de Estatísticas ainda não implementada.");
-                    break;
-                case 5:
-                    System.out.println("Configurações ainda não implementadas.");
-                    break;
-                case 6:
-                    System.out.println("Saindo do sistema. Até logo!");
-                    return;
-                default:
-                    System.out.println("Opção inválida. Por favor, tente novamente.");
-            }
-        }
-    }
-
-
     private static void menuPratos(Scanner scanner, Prato[] pratos, int numeroPratos) {
         boolean sair = false;
 
@@ -275,7 +255,3 @@ public class Main {
             }
         }
     }
-
-
-    }
-
