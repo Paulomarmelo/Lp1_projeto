@@ -298,3 +298,81 @@ public class Main {
 
 
 
+CENAS DO MENU
+
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        // Inicializa as definições
+        Definicoes definicoes = new Definicoes(
+                "C:\\Users\\pjtug\\Desktop\\GIT_repos\\ProjetoLp1\\src\\",
+                "C:\\Users\\pjtug\\Desktop\\GIT_repos\\ProjetoLp1\\src\\",
+                "C:\\Users\\pjtug\\Desktop\\GIT_repos\\ProjetoLp1\\src\\",
+                ",",
+                20,
+                2,
+                5.0,
+                "admin123"
+        );
+
+        // Lê os clientes do ficheiro
+        Clientes[] clientes = LeitorClientes.lerClientesDoFicheiro(definicoes.getCaminhoClientes(), definicoes.getSeparadorFicheiros());
+
+        // Inicializa o GestorDiaDia
+        GestorDiaDia gestorDiaDia = new GestorDiaDia(clientes, clientes.length, 0, definicoes.getUnidadesTempoDia());
+
+        Scanner scanner = new Scanner(System.in);
+        boolean running = true;
+
+        while (running) {
+            System.out.println("\n--- Dia-a-Dia do Restaurante ---");
+            System.out.println("1. Avançar tempo");
+            System.out.println("2. Atribuir mesa");
+            System.out.println("3. Adicionar cliente");
+            System.out.println("4. Sair");
+            System.out.print("Escolha uma opção: ");
+            int escolha = scanner.nextInt();
+            scanner.nextLine(); // Consumir a nova linha
+
+            switch (escolha) {
+                case 1:
+                    gestorDiaDia.avancarTempo();
+                    break;
+                case 2:
+                    System.out.print("Nome da reserva: ");
+                    String nomeReserva = scanner.nextLine();
+                    System.out.print("Número da mesa: ");
+                    int numeroMesa = scanner.nextInt();
+                    gestorDiaDia.atribuirMesa(nomeReserva, numeroMesa);
+                    break;
+                case 3:
+                    System.out.print("Nome da reserva: ");
+                    String nome = scanner.nextLine();
+                    System.out.print("Número de pessoas: ");
+                    int numPessoas = scanner.nextInt();
+                    System.out.print("Número de entradas: ");
+                    int numEntradas = scanner.nextInt();
+                    System.out.print("Número de sobremesas: ");
+                    int numSobremesas = scanner.nextInt();
+                    System.out.print("Tempo máximo de espera para mesa: ");
+                    int tempoMesa = scanner.nextInt();
+                    System.out.print("Tempo máximo de espera para atendimento: ");
+                    int tempoAtendimento = scanner.nextInt();
+                    gestorDiaDia.adicionarCliente(nome, numPessoas, numEntradas, numSobremesas, tempoMesa, tempoAtendimento);
+                    break;
+                case 4:
+                    running = false;
+                    System.out.println("A sair da aplicação...");
+                    break;
+                default:
+                    System.out.println("Opção inválida.");
+            }
+        }
+
+        scanner.close();
+    }
+}
+
+
+

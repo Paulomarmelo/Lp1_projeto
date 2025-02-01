@@ -6,6 +6,7 @@ public class Main {
                 "C:\\Users\\pjtug\\Desktop\\GIT_repos\\ProjetoLp1\\src\\",
                 "C:\\Users\\pjtug\\Desktop\\GIT_repos\\ProjetoLp1\\src\\",
                 "C:\\Users\\pjtug\\Desktop\\GIT_repos\\ProjetoLp1\\src\\",
+                "C:\\Users\\pjtug\\Desktop\\GIT_repos\\ProjetoLp1\\src\\",
                 ",",
                 20,
                 2,
@@ -228,14 +229,7 @@ public class Main {
                     menuPratos(scanner, pratos, numeroPratos);
                     break;
                 case 3:
-                    gerenciarDiaADia(scanner, new Definicoes("C:\\Users\\pjtug\\Desktop\\GIT_repos\\ProjetoLp1\\src\\",
-                            "C:\\Users\\pjtug\\Desktop\\GIT_repos\\ProjetoLp1\\src\\",
-                            "C:\\Users\\pjtug\\Desktop\\GIT_repos\\ProjetoLp1\\src\\",
-                            ",",
-                            20,
-                            2,
-                            5.0,
-                            "admin123") );
+
                     break;
                 case 4:
                     System.out.println("Consulta de Estatísticas ainda não implementada.");
@@ -250,38 +244,6 @@ public class Main {
                     System.out.println("Opção inválida. Por favor, tente novamente.");
             }
         }
-    }
-
-//continuar aqui
-    private static void gerenciarDiaADia(Scanner scanner, Definicoes definicoes) {
-        // Ler clientes do arquivo
-        int capacidadeMaxima = 6;
-        Clientes[] clientes = LeitorClientes.lerClientesDoFicheiro(definicoes.getCaminhoClientes(), definicoes.getSeparadorFicheiros());
-        GestaoMesas gestaoMesas = new GestaoMesas(capacidadeMaxima);
-
-        // Loop para gerenciar o dia
-        for (int i = 1; i <= definicoes.getUnidadesTempoDia(); i++) {
-            System.out.println("Tempo: " + i + "/" + definicoes.getUnidadesTempoDia());
-
-            // Lógica para alocar clientes e gerenciar mesas
-            for (Clientes cliente : clientes) {
-                // Verificar se o cliente pode ser alocado
-                // Se sim, alocar e registrar no log
-            }
-
-            // Permitir que o usuário insira um novo cliente
-            System.out.println("Deseja adicionar um novo cliente? (s/n)");
-            String resposta = scanner.nextLine();
-            if (resposta.equalsIgnoreCase("s")) {
-                // Lógica para adicionar um novo cliente
-            }
-
-            // Esperar pela próxima unidade de tempo
-            System.out.println("Pressione qualquer número e depois Enter para avançar para a próxima unidade de tempo...");
-            scanner.nextLine();
-        }
-
-        System.out.println("Gerenciamento do Dia-a-Dia concluído.");
     }
 
 
@@ -300,10 +262,10 @@ public class Main {
 
             switch (opcao) {
                 case 1:
-                    listarPratos(pratos, numeroPratos);
+                    GestorPratos.listarPratos(pratos, numeroPratos);
                     break;
                 case 2:
-                    alterarDisponibilidadePrato(scanner, pratos, numeroPratos); // Ensure this method is defined
+                    GestorPratos.alterarDisponibilidadePrato(scanner, pratos, numeroPratos); // Ensure this method is defined
                     break;
                 case 3:
                     sair = true;
@@ -314,33 +276,6 @@ public class Main {
         }
     }
 
-    private static void listarPratos(Prato[] pratos, int numeroPratos) {
-        if (numeroPratos == 0) {
-            System.out.println("Nenhum prato cadastrado.");
-        } else {
-            System.out.println("\nLista de Pratos:");
-            for (int i = 0; i < numeroPratos; i++) {
-                Prato prato = pratos[i];
-                System.out.printf("Prato %d: Nome: %s | Categoria: %s | Preço de Custo: %.2f | Preço de Venda: %.2f | Tempo de Preparo: %d minutos | Disponível: %s\n",
-                        i + 1, prato.getNomePrato(), prato.getCategoria(),
-                        prato.getPrecoCusto(), prato.getPrecoVenda(),
-                        prato.getTempoPreparo(), (prato.isDisponivel() ? "Sim" : "Não"));
-            }
-        }
+
     }
 
-    // Define the alterarDisponibilidadePrato method
-    private static void alterarDisponibilidadePrato(Scanner scanner, Prato[] pratos, int numeroPratos) {
-        System.out.print("Digite o número do prato para alterar a disponibilidade: ");
-        int numeroPrato = scanner.nextInt();
-        scanner.nextLine(); // Consumir a nova linha
-
-        if (numeroPrato > 0 && numeroPrato <= numeroPratos) {
-            Prato prato = pratos[numeroPrato - 1];
-            prato.setDisponivel(!prato.isDisponivel()); // Toggle availability
-            System.out.println("Disponibilidade do prato " + prato.getNomePrato() + " alterada com sucesso.");
-        } else {
-            System.out.println("Número de prato inválido.");
-        }
-    }
-}
