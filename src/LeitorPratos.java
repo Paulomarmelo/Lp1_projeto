@@ -7,7 +7,6 @@ public class LeitorPratos {
     public static Prato[] lerPratosDoFicheiro(String caminho, String separador) {
         String filePath = caminho + "/Pratos.txt"; // Caminho do arquivo
 
-
         int maxPratos = 100; // Define o tamanho máximo do array
         Prato[] listaPratos = new Prato[maxPratos];
         int contador = 0; // Contador para acompanhar o número de pratos
@@ -17,7 +16,8 @@ public class LeitorPratos {
             while ((linha = br.readLine()) != null) {
                 String[] dados = linha.split(separador);
 
-                if (dados.length < 6) {
+                // Ajuste aqui para verificar o número correto de campos
+                if (dados.length < 8) { // Agora esperamos 8 campos
                     System.err.println("Linha inválida (campos insuficientes): " + linha);
                     continue; // Ignorar a linha inválida
                 }
@@ -28,9 +28,12 @@ public class LeitorPratos {
                     double precoCusto = Double.parseDouble(dados[2]);
                     double precoVenda = Double.parseDouble(dados[3]);
                     int tempoPreparo = Integer.parseInt(dados[4]);
-                    boolean disponivel = Boolean.parseBoolean(dados[5]);
+                    int tempoConsumo = Integer.parseInt(dados[5]); // Novo campo
+                    int tempoEstrago = Integer.parseInt(dados[6]); // Novo campo
+                    boolean disponivel = Boolean.parseBoolean(dados[7]);
 
-                    Prato prato = new Prato(nome, precoCusto, categoria, precoVenda, tempoPreparo, disponivel);
+                    // Crie o prato com os dados lidos
+                    Prato prato = new Prato(nome, categoria, precoCusto, precoVenda, tempoConsumo, tempoPreparo, tempoEstrago, disponivel);
 
                     // Armazena o prato no array
                     listaPratos[contador] = prato;

@@ -33,4 +33,9 @@ public class Mesa {
     public void setOcupada(boolean ocupada) {
         this.ocupada = ocupada;
     }
+
+    @Override
+    public String toString() {
+        return "Mesa [ID=" + id + ", Capacidade=" + capacidade + ", Ocupada=" + ocupada + "]";
+    }
 }

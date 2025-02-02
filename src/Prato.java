@@ -3,17 +3,37 @@ public class Prato {
     private String categoria;
     private double precoCusto;
     private double precoVenda;
+    private int tempoConsumo;
     private int tempoPreparo;
+    private int tempoEstrago;
     private boolean disponivel;
 
 
-    public Prato(String nomePrato, double precoCusto, String categoria, double precoVenda, int tempoPreparo, boolean disponivel) {
+    public Prato(String nomePrato, String categoria, double precoCusto, double precoVenda, int tempoConsumo, int tempoPreparo, int tempoEstrago, boolean disponivel) {
         this.nomePrato = nomePrato;
-        this.precoCusto = precoCusto;
         this.categoria = categoria;
+        this.precoCusto = precoCusto;
         this.precoVenda = precoVenda;
+        this.tempoConsumo = tempoConsumo;
         this.tempoPreparo = tempoPreparo;
+        this.tempoEstrago = tempoEstrago;
         this.disponivel = disponivel;
+    }
+
+    public int getTempoEstrago() {
+        return tempoEstrago;
+    }
+
+    public void setTempoEstrago(int tempoEstrago) {
+        this.tempoEstrago = tempoEstrago;
+    }
+
+    public int getTempoConsumo() {
+        return tempoConsumo;
+    }
+
+    public void setTempoConsumo(int tempoConsumo) {
+        this.tempoConsumo = tempoConsumo;
     }
 
     public String getNomePrato() {
