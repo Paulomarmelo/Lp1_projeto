@@ -16,7 +16,7 @@ public class LeitorMesas {
             while ((linha = br.readLine()) != null) {
                 String[] dados = linha.split(separador);
 
-                if (dados.length < 3) {
+                if (dados.length < 2) {
                     System.err.println("Linha inválida (campos insuficientes): " + linha);
                     continue; // Ignorar a linha inválida
                 }
@@ -24,14 +24,16 @@ public class LeitorMesas {
                 try {
                     int id = Integer.parseInt(dados[0]);
                     int capacidade = Integer.parseInt(dados[1]);
-                    boolean ocupada = false;
+                    boolean ocupada = false; // Definindo o campo "ocupada" como false por padrão
 
+                    // Cria a mesa com o campo "ocupada" definido como false
                     Mesa mesa = new Mesa(id, capacidade);
                     mesa.setOcupada(ocupada);
 
                     // Armazena a mesa no array
                     listaMesas[contador] = mesa;
                     contador++;
+
                 } catch (NumberFormatException e) {
                     System.err.println("Erro ao converter valores numéricos na linha: " + linha);
                 }

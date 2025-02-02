@@ -59,7 +59,7 @@ public class Main {
         scanner.close(); // Scanner fechado aqui, uma única vez
     }
 
-    private static void exibirMenuPrincipal(Scanner scanner, Prato[] pratos, int numeroPratos, GestaoMesas gestaoMesas) {
+    private static void exibirMenuPrincipal(Scanner scanner, Prato[] pratos, int numeroPratos, GestorMesas gestaoMesas) {
         while (true) {
             System.out.println("\nGestão de Restaurante");
             System.out.println("1. Gerir Mesas");

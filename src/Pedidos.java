@@ -1,16 +1,20 @@
 public class Pedidos {
     private int id;
-    private Mesa mesa;
+    private int mesa;
     private Prato prato;
     private int quantidade;
+    private Clientes cliente; // Alterado para o objeto Clientes
 
-    public Pedidos(int quantidade, int id, Mesa mesa, Prato prato) {
-        this.quantidade = quantidade;
+    // Construtor
+    public Pedidos(int id, int mesa, int quantidade, Prato prato, Clientes cliente) {
         this.id = id;
         this.mesa = mesa;
+        this.quantidade = quantidade;
         this.prato = prato;
+        this.cliente = cliente; // Atribui o objeto Clientes
     }
 
+    // Getters e Setters
     public int getId() {
         return id;
     }
@@ -19,11 +23,11 @@ public class Pedidos {
         this.id = id;
     }
 
-    public Mesa getMesa() {
+    public int getMesa() {
         return mesa;
     }
 
-    public void setMesa(Mesa mesa) {
+    public void setMesa(int mesa) {
         this.mesa = mesa;
     }
 
@@ -42,4 +46,25 @@ public class Pedidos {
     public void setQuantidade(int quantidade) {
         this.quantidade = quantidade;
     }
+
+    public Clientes getCliente() {
+        return cliente; // Método para obter o cliente
+    }
+
+    public void setCliente(Clientes cliente) {
+        this.cliente = cliente; // Método para definir o cliente
+    }
+
+    @Override
+    public String toString() {
+        return "Pedido [ID=" + id +
+                ", Mesa=" + mesa +
+                ", Cliente=" + cliente.getNomeReserva() + // Acessa o nome do cliente
+                ", Prato=" + prato.getNomePrato() +
+                " (Categoria: " + prato.getCategoria() +
+                ", Preço: " + prato.getPrecoVenda() +
+                "), Quantidade=" + quantidade +
+                "]";
+    }
 }
+
