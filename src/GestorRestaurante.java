@@ -3,10 +3,10 @@ import java.util.Scanner;
 public class GestorRestaurante {
 
         Definicoes definicoes = new Definicoes(
-                "C:\\Users\\pjtug\\Desktop\\GIT_repos\\ProjetoLp1\\src\\",
-                "C:\\Users\\pjtug\\Desktop\\GIT_repos\\ProjetoLp1\\src\\",
-                "C:\\Users\\pjtug\\Desktop\\GIT_repos\\ProjetoLp1\\src\\",
-                "C:\\Users\\pjtug\\Desktop\\GIT_repos\\ProjetoLp1\\src\\",
+                "C:\\Users\\dbsob\\Desktop\\LP1\\RitoTech\\src\\",
+                "C:\\Users\\dbsob\\Desktop\\LP1\\RitoTech\\src\\",
+                "C:\\Users\\dbsob\\Desktop\\LP1\\RitoTech\\src\\",
+                "C:\\Users\\dbsob\\Desktop\\LP1\\RitoTech\\src\\",
                 ",",
                 20,
                 2,
