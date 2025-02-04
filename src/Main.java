@@ -20,6 +20,7 @@
             Reservas[] reservas = LeitorReservas.lerReservasDoFicheiro(definicoes.getCaminhoReservas(), definicoes.getSeparadorFicheiros());
             Mesa[] mesas = LeitorMesas.lerMesasDoFicheiro(definicoes.getCaminhoMesas(), definicoes.getSeparadorFicheiros());
             Pedidos[] pedidos = new Pedidos[0];
+            int dia = 0;
 
             Scanner scanner = new Scanner(System.in);
             boolean running = true;
@@ -62,7 +63,9 @@
                         configurarAplicacao(scanner, definicoes);
                         break;
                     case 5:
-                        iniciarDia(definicoes, clientes, mesas, pratos, pedidos);
+                        dia = dia + 1;
+                        iniciarDia(definicoes, clientes, mesas, pratos, pedidos, dia);
+
                         break;
                     case 6:
                         consultarLogs();
@@ -131,7 +134,6 @@
                     mesasDisponiveis = true; // Marca que há mesas disponíveis
                 }
             }
-
             if (!mesasDisponiveis) {
                 System.out.println("Não há mesas disponíveis.");
                 return pedidos; // Retorna sem registrar pedido se não houver mesas disponíveis
@@ -175,21 +177,42 @@
                 return pedidos; // Retorna sem registrar pedido se não houver pratos disponíveis
             }
 
-            System.out.print("Digite o número do prato: ");
-            int pratoIndex = scanner.nextInt() - 1; // Subtrai 1 para obter o índice correto
-            scanner.nextLine(); // Consumir a nova linha
+            // Definir um tamanho máximo para o pedido
+            final int MAX_PRATOS = 10; // Por exemplo, um pedido pode ter no máximo 10 pratos
+            Prato[] pratosSelecionados = new Prato[MAX_PRATOS];
+            int[] quantidadesSelecionadas = new int[MAX_PRATOS];
+            int contador = 0;
 
-            // Verificar se o índice do prato é válido
-            if (pratoIndex < 0 || pratoIndex >= pratos.length || !pratos[pratoIndex].isDisponivel()) {
-                System.out.println("Prato inválido ou indisponível.");
-                return pedidos;
+            boolean continuar = true;
+            while (continuar && contador < MAX_PRATOS) {
+                System.out.print("Digite o número do prato: ");
+                int pratoIndex = scanner.nextInt() - 1; // Subtrai 1 para obter o índice correto
+                scanner.nextLine(); // Consumir a nova linha
+
+                // Verificar se o índice do prato é válido
+                if (pratoIndex < 0 || pratoIndex >= pratos.length || !pratos[pratoIndex].isDisponivel()) {
+                    System.out.println("Prato inválido ou indisponível.");
+                    continue; // Volta para o início do loop
+                }
+
+                Prato pratoSelecionado = pratos[pratoIndex];
+
+                System.out.print("Digite a quantidade: ");
+                int quantidade = scanner.nextInt();
+                scanner.nextLine(); // Consumir a nova linha
+
+                // Adiciona o prato e a quantidade às arrays
+                pratosSelecionados[contador] = pratoSelecionado;
+                quantidadesSelecionadas[contador] = quantidade;
+                contador++;
+
+                // Pergunta se o usuário deseja adicionar mais pratos
+                System.out.print("Deseja adicionar outro prato? (s/n): ");
+                String resposta = scanner.nextLine();
+                if (!resposta.equalsIgnoreCase("s")) {
+                    continuar = false; // Sai do loop
+                }
             }
-
-            Prato pratoSelecionado = pratos[pratoIndex];
-
-            System.out.print("Digite a quantidade: ");
-            int quantidade = scanner.nextInt();
-            scanner.nextLine(); // Consumir a nova linha
 
             // Gerar um ID único para o pedido
             int id = pedidos.length + 1;
@@ -210,9 +233,17 @@
                 return pedidos;
             }
 
-            // Registrar o pedido
-            return GestorRestaurante.registarPedido(pedidos, id, mesaId, pratoSelecionado, quantidade, clienteSelecionado);
+            // Registrar o pedido para cada prato selecionado
+            for (int i = 0; i < contador; i++) {
+                Prato prato = pratosSelecionados[i];
+                int quantidade = quantidadesSelecionadas[i];
+                pedidos = GestorRestaurante.registarPedido(pedidos, id, mesaId, prato, quantidade, clienteSelecionado);
+            }
+
+            System.out.println("Pedido registado com sucesso com " + contador + " pratos.");
+            return pedidos;
         }
+
 
         private static void consultarEstatisticas() {
             System.out.println("Consulta de Estatísticas ainda não implementada.");
@@ -222,33 +253,31 @@
             menuDefinicoes(scanner, definicoes);
         }
 
-        private static void iniciarDia(Definicoes definicoes, Clientes[] clientes, Mesa[] mesas, Prato[] pratos, Pedidos[] pedidos) {
+        private static void iniciarDia(Definicoes definicoes, Clientes[] clientes, Mesa[] mesas, Prato[] pratos, Pedidos[] pedidos, int dia) {
             Scanner scanner = new Scanner(System.in);
             boolean diaAtivo = true;
             int[] tempoAtual = {0};
+
             while (diaAtivo) {
-                System.out.println("\n--- Menu Dia a Dia ---");
+                System.out.println("__________|Dia - " + dia + "|__________");
                 System.out.println("1. Avançar Tempo");
                 System.out.println("2. Adicionar Cliente");
                 System.out.println("3. Atribuir Mesa");
-                System.out.println("4. Registar pedidos");
-                System.out.println("5. Listar clientes");
-                System.out.println("6. Terminar dia");
-                //Listar pedidos
+                System.out.println("4. Registar Pedidos");
+                System.out.println("5. Listar Clientes");
+                System.out.println("6. Listar Pedidos");
+                System.out.println("7. Terminar Dia");
 
                 System.out.print("Escolha uma opção: ");
-
-
                 int opcao = scanner.nextInt();
-
-                scanner.nextLine();
+                scanner.nextLine(); // Consumir a nova linha
 
                 switch (opcao) {
                     case 1:
                         GestorRestaurante.avancarTempo(definicoes, clientes, mesas, pratos, tempoAtual);
-
                         break;
                     case 2:
+                        // Coletar dados do cliente
                         System.out.print("Digite o nome da reserva: ");
                         String nomeReserva = scanner.nextLine();
                         System.out.print("Digite o número de pessoas: ");
@@ -264,10 +293,28 @@
                         scanner.nextLine(); // Consumir a nova linha
 
                         // Adiciona o cliente ao array de clientes
-                        clientes = GestorRestaurante.adicionarCliente(clientes, nomeReserva, numPessoas, numEntradas, numSobremesas, tempoMaxEsperaMesa, tempoMaxEsperaAtendimento, definicoes.getUnidadesTempoDia());
+                        clientes = GestorRestaurante.adicionarCliente(clientes, nomeReserva, numPessoas, numEntradas, numSobremesas, tempoMaxEsperaMesa, tempoMaxEsperaAtendimento, tempoAtual[0]);
                         break;
                     case 3:
                         GestorRestaurante.listarMesas(mesas); // Chama o método para listar mesas
+
+                        // Listar clientes à espera
+                        System.out.println("\nClientes à espera:");
+                        boolean clientesAguardando = false;
+                        for (Clientes cliente : clientes) {
+                            // Verifica se o cliente chegou e ainda está à espera
+                            if (cliente.getChegadaUT() <= tempoAtual[0] &&
+                                    (cliente.getChegadaUT() + cliente.getMaxUTatendimento() > tempoAtual[0])) {
+                                int tempoRestante = (cliente.getChegadaUT() + cliente.getMaxUTatendimento()) - tempoAtual[0];
+                                System.out.println(cliente.getNomeReserva() + " | Tempo restante: " + tempoRestante);
+                                clientesAguardando = true;
+                            }
+                        }
+                        if (!clientesAguardando) {
+                            System.out.println("Nenhum cliente à espera.");
+                        }
+
+                        // Atribuir mesa
                         System.out.print("Digite o nome da reserva para atribuir mesa: ");
                         String nomeReservaMesa = scanner.nextLine();
                         System.out.print("Digite o número da mesa: ");
@@ -277,7 +324,6 @@
                         // Atribui a mesa ao cliente, passando o tempoAtual
                         GestorRestaurante.atribuirMesa(clientes, mesas, nomeReservaMesa, numeroMesa, tempoAtual[0]);
                         break;
-
                     case 4:
                         registarPedidos(scanner, pedidos, mesas, pratos, clientes);
                         break;
@@ -285,6 +331,9 @@
                         GestorRestaurante.listarClientes(clientes, mesas, tempoAtual[0]);
                         break;
                     case 6:
+                        listarPedidos(pedidos);
+                        break;
+                    case 7:
                         System.out.println("Saindo do dia.");
                         diaAtivo = false;
                         break;
@@ -293,7 +342,16 @@
                 }
             }
         }
-
+        private static void listarPedidos(Pedidos[] pedidos) {
+            System.out.println("\n--- Lista de Pedidos ---");
+            if (pedidos.length == 0) {
+                System.out.println("Nenhum pedido registrado.");
+                return;
+            }
+            for (Pedidos pedido : pedidos) {
+                System.out.println(pedido.toString()); // Supondo que o método toString() esteja implementado na classe Pedidos
+            }
+        }
 
         private static void consultarLogs() {
             System.out.println("Consulta de Logs ainda não implementada.");

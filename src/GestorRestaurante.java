@@ -17,6 +17,7 @@ public class GestorRestaurante {
     Clientes[] clientes = LeitorClientes.lerClientesDoFicheiro(definicoes.getCaminhoClientes(), definicoes.getSeparadorFicheiros());
     Reservas[] reservas = LeitorReservas.lerReservasDoFicheiro(definicoes.getCaminhoReservas(), definicoes.getSeparadorFicheiros());
     Mesa[] mesas = LeitorMesas.lerMesasDoFicheiro(definicoes.getCaminhoMesas(), definicoes.getSeparadorFicheiros());
+    Prato[] prato = LeitorPratos.lerPratosDoFicheiro(definicoes.getCaminhoPratos(), definicoes.getSeparadorFicheiros());
 
 
 
@@ -64,7 +65,7 @@ public class GestorRestaurante {
         for (Clientes cliente : clientes) {
             if (cliente.getNomeReserva().equals(nomeReserva)) {
                 // Verifica se o tempo de espera excedeu o máximo permitido
-                if (tempoAtual > cliente.getMaxUTatendimento()) {
+                if (tempoAtual > cliente.getChegadaUT() + cliente.getMaxUTatendimento()) {
                     System.out.println("Não é possível atribuir a mesa ao cliente " + nomeReserva + " porque o tempo máximo de espera foi excedido.");
                     return;
                 }
@@ -74,13 +75,14 @@ public class GestorRestaurante {
                     if (mesa.getId() == numeroMesa) {
                         // Verifica se a mesa está ocupada
                         if (!mesa.isOcupada()) {
-                            // Verifica se a capacidade da mesa é suficiente para o número de pessoas
-                            if (mesa.getCapacidade() < cliente.getNumPessoas()) {
-                                System.out.println("Não é possível atribuir a mesa " + numeroMesa + " ao cliente " + nomeReserva + " porque a capacidade da mesa é insuficiente.");
-                                return;
+                            // Verifica se a ação pode ser realizada
+                            if (tempoAtual > mesa.getUltimaAcaoTempo()) {
+                                mesa.setOcupada(true); // Marca a mesa como ocupada
+                                mesa.setUltimaAcaoTempo(tempoAtual); // Atualiza o tempo da última ação
+                                System.out.println("Mesa " + numeroMesa + " atribuída ao cliente " + nomeReserva);
+                            } else {
+                                System.out.println("A mesa " + numeroMesa + " não pode ser atribuída ainda. A última ação foi realizada na unidade de tempo " + mesa.getUltimaAcaoTempo());
                             }
-                            mesa.setOcupada(true); // Marca a mesa como ocupada
-                            System.out.println("Mesa " + numeroMesa + " atribuída ao cliente " + nomeReserva);
                         } else {
                             System.out.println("Mesa " + numeroMesa + " já está ocupada.");
                         }
@@ -93,7 +95,6 @@ public class GestorRestaurante {
         }
         System.out.println("Cliente " + nomeReserva + " não encontrado.");
     }
-
 
 
 
@@ -109,30 +110,6 @@ public class GestorRestaurante {
         System.out.println("Cliente " + nomeReserva + " adicionado com sucesso.");
         return novosClientes;
     }
-
-    public static void atribuirMesa(Clientes[] clientes, Mesa[] mesas, String nomeReserva, int numeroMesa) {
-        // Encontra o cliente pelo nome da reserva
-        for (Clientes cliente : clientes) {
-            if (cliente.getNomeReserva().equals(nomeReserva)) {
-                // Encontra a mesa pelo número
-                for (Mesa mesa : mesas) {
-                    if (mesa.getId() == numeroMesa) {
-                        if (!mesa.isOcupada()) {
-                            mesa.setOcupada(true); // Marca a mesa como ocupada
-                            System.out.println("Mesa " + numeroMesa + " atribuída ao cliente " + nomeReserva);
-                        } else {
-                            System.out.println("Mesa " + numeroMesa + " já está ocupada.");
-                        }
-                        return;
-                    }
-                }
-                System.out.println("Mesa " + numeroMesa + " não encontrada.");
-                return;
-            }
-        }
-        System.out.println("Cliente " + nomeReserva + " não encontrado.");
-    }
-
 
     public static void listarMesas(Mesa[] mesas) {
         System.out.println("\n--- Lista de Mesas ---");
@@ -259,7 +236,7 @@ public class GestorRestaurante {
         System.arraycopy(pedidos, 0, novosPedidos, 0, pedidos.length);
 
         // Cria o novo pedido
-        Pedidos novoPedido = new Pedidos(id, mesa, quantidade, prato, cliente); // Passa o objeto Clientes
+        Pedidos novoPedido = new Pedidos(id, mesa, prato, quantidade, cliente); // Passa o objeto Clientes
         novosPedidos[pedidos.length] = novoPedido;
 
         // Calcular o tempo total para o cliente

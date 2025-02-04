@@ -77,7 +77,7 @@ public class Prato {
     }
 
     public boolean isDisponivel() {
-        return disponivel;
+        return true;
     }
 
     public void setDisponivel(boolean disponivel) {

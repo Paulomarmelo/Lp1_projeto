@@ -6,12 +6,14 @@ public class Pedidos {
     private Clientes cliente; // Alterado para o objeto Clientes
 
     // Construtor
-    public Pedidos(int id, int mesa, int quantidade, Prato prato, Clientes cliente) {
+
+
+    public Pedidos(int id, int mesa, Prato prato, int quantidade, Clientes cliente) {
         this.id = id;
         this.mesa = mesa;
-        this.quantidade = quantidade;
         this.prato = prato;
-        this.cliente = cliente; // Atribui o objeto Clientes
+        this.quantidade = quantidade;
+        this.cliente = cliente;
     }
 
     // Getters e Setters
@@ -64,6 +66,7 @@ public class Pedidos {
                 " (Categoria: " + prato.getCategoria() +
                 ", Preço: " + prato.getPrecoVenda() +
                 "), Quantidade=" + quantidade +
+                "), Disponibilidade="+ prato.isDisponivel() +
                 "]";
     }
 }
