@@ -28,8 +28,8 @@ public class LeitorPratos {
                     double precoCusto = Double.parseDouble(dados[2]);
                     double precoVenda = Double.parseDouble(dados[3]);
                     int tempoPreparo = Integer.parseInt(dados[4]);
-                    int tempoConsumo = Integer.parseInt(dados[5]); // Novo campo
-                    int tempoEstrago = Integer.parseInt(dados[6]); // Novo campo
+                    int tempoConsumo = Integer.parseInt(dados[5]);
+                    int tempoEstrago = Integer.parseInt(dados[6]);
                     boolean disponivel = Boolean.parseBoolean(dados[7]);
 
                     // Crie o prato com os dados lidos
