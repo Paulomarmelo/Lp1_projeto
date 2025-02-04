@@ -23,7 +23,8 @@ public class Definicoes {
         this.senha = senha;
     }
 
-    // Getters e Setters para clientes, pratos, reservas e mesas
+
+
     public String getCaminhoClientes() { return caminhoClientes; }
 
     public void setCaminhoClientes(String caminhoClientes) { this.caminhoClientes = caminhoClientes; }

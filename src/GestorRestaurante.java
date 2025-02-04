@@ -2,17 +2,17 @@ import java.util.Scanner;
 
 public class GestorRestaurante {
 
-        Definicoes definicoes = new Definicoes(
-                "C:\\Users\\dbsob\\Desktop\\LP1\\RitoTech\\src\\",
-                "C:\\Users\\dbsob\\Desktop\\LP1\\RitoTech\\src\\",
-                "C:\\Users\\dbsob\\Desktop\\LP1\\RitoTech\\src\\",
-                "C:\\Users\\dbsob\\Desktop\\LP1\\RitoTech\\src\\",
-                ",",
-                20,
-                2,
-                5.0,
-                "admin123"
-        );
+    Definicoes definicoes = new Definicoes(
+            "C:\\Users\\pjtug\\Desktop\\GIT_repos\\ProjetoLp1\\src\\",
+            "C:\\Users\\pjtug\\Desktop\\GIT_repos\\ProjetoLp1\\src\\",
+            "C:\\Users\\pjtug\\Desktop\\GIT_repos\\ProjetoLp1\\src\\",
+            "C:\\Users\\pjtug\\Desktop\\GIT_repos\\ProjetoLp1\\src\\",
+            ",",
+            20,
+            2,
+            5.0,
+            "admin123"
+    );
 
     Clientes[] clientes = LeitorClientes.lerClientesDoFicheiro(definicoes.getCaminhoClientes(), definicoes.getSeparadorFicheiros());
     Reservas[] reservas = LeitorReservas.lerReservasDoFicheiro(definicoes.getCaminhoReservas(), definicoes.getSeparadorFicheiros());
