@@ -1,3 +1,6 @@
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class GestorRestaurante {
@@ -252,6 +255,184 @@ public class GestorRestaurante {
 
         System.out.println("Pedido registado com sucesso: " + novoPedido);
         return novosPedidos;
+    }
+
+    public static void consultarEstatisticas(Pedidos[] pedidos, Prato[] pratos) {
+        if (pedidos.length == 0) {
+            System.out.println("Nenhum pedido registrado.");
+            return;
+        }
+
+        int[] contagemPratos = new int[pratos.length]; // Array para contar os pedidos de cada prato
+        int pratoMaisPedidoIndex = -1;
+        int maxPedidos = 0;
+
+        // Contar os pedidos
+        for (Pedidos pedido : pedidos) {
+            int pratoIndex = encontrarPratoIndex(pratos, pedido.getPrato().getNomePrato());
+            if (pratoIndex != -1) {
+                contagemPratos[pratoIndex]++; // Incrementa a contagem do prato
+                // Verifica se é o prato mais pedido
+                if (contagemPratos[pratoIndex] > maxPedidos) {
+                    maxPedidos = contagemPratos[pratoIndex];
+                    pratoMaisPedidoIndex = pratoIndex;
+                }
+            }
+        }
+
+        // Exibir resultados
+        System.out.println("Estatísticas dos Pedidos:");
+        System.out.println("Total de Pedidos: " + pedidos.length);
+        if (pratoMaisPedidoIndex != -1) {
+            System.out.println("Prato Mais Pedido: " + pratos[pratoMaisPedidoIndex].getNomePrato() + " (Quantidade: " + maxPedidos + ")");
+        } else {
+            System.out.println("Nenhum prato foi pedido.");
+        }
+    }
+
+    public static Pedidos[] registarPedidos(Scanner scanner, Pedidos[] pedidos, Mesa[] mesas, Prato[] pratos, Clientes[] clientes, int dia) {
+        System.out.println("\n--- Registar Pedido ---");
+
+        // Listar todas as mesas com suas disponibilidades
+        System.out.println("Mesas disponíveis:");
+        boolean mesasDisponiveis = false;
+        for (Mesa mesa : mesas) {
+            String estado = mesa.isOcupada() ? "Ocupada" : "Livre"; // Verifica se a mesa está ocupada
+            System.out.println("Mesa " + mesa.getId() + " (Capacidade: " + mesa.getCapacidade() + ", Estado: " + estado + ")");
+            if (!mesa.isOcupada()) {
+                mesasDisponiveis = true; // Marca que há mesas disponíveis
+            }
+        }
+        if (!mesasDisponiveis) {
+            System.out.println("Não há mesas disponíveis.");
+            return pedidos; // Retorna sem registrar pedido se não houver mesas disponíveis
+        }
+
+        // Coletar dados do pedido
+        System.out.print("Digite o ID da mesa: ");
+        int mesaId = scanner.nextInt();
+        scanner.nextLine();
+
+        // Verificar se a mesa existe e se está ocupada
+        Mesa mesaSelecionada = null;
+        for (Mesa mesa : mesas) {
+            if (mesa.getId() == mesaId) {
+                mesaSelecionada = mesa;
+                break;
+            }
+        }
+        if (mesaSelecionada == null) {
+            System.out.println("Mesa inválida.");
+            return pedidos;
+        }
+
+        // Verificar se a mesa está ocupada
+        if (!mesaSelecionada.isOcupada()) {
+            System.out.println("A mesa não está ocupada. Não é possível registrar pedidos.");
+            return pedidos;
+        }
+
+        // Listar pratos disponíveis
+        System.out.println("Pratos disponíveis:");
+        boolean pratosDisponiveis = false;
+        for (int i = 0; i < pratos.length; i++) {
+            if (pratos[i].isDisponivel()) {
+                System.out.println((i + 1) + ". " + pratos[i].getNomePrato() + " (Categoria: " + pratos[i].getCategoria() + ")");
+                pratosDisponiveis = true;
+            }
+        }
+        if (!pratosDisponiveis) {
+            System.out.println("Não há pratos disponíveis.");
+            return pedidos; // Retorna sem registrar pedido se não houver pratos disponíveis
+        }
+
+        // Definir um tamanho máximo para o pedido
+        final int MAX_PRATOS = 10; // Por exemplo, um pedido pode ter no máximo 10 pratos
+        Prato[] pratosSelecionados = new Prato[MAX_PRATOS];
+        int[] quantidadesSelecionadas = new int[MAX_PRATOS];
+        int contador = 0;
+
+        boolean continuar = true;
+        while (continuar && contador < MAX_PRATOS) {
+            System.out.print("Digite o número do prato: ");
+            int pratoIndex = scanner.nextInt() - 1; scanner.nextLine(); // Consumir a nova linha
+
+            // Verificar se o índice do prato é válido
+            if (pratoIndex < 0 || pratoIndex >= pratos.length || !pratos[pratoIndex].isDisponivel()) {
+                System.out.println("Prato inválido ou indisponível.");
+                continue; // Volta para o início do loop
+            }
+
+            Prato pratoSelecionado = pratos[pratoIndex];
+
+            System.out.print("Digite a quantidade: ");
+            int quantidade = scanner.nextInt();
+            scanner.nextLine(); // Consumir a nova linha
+
+            // Adiciona o prato e a quantidade às arrays
+            pratosSelecionados[contador] = pratoSelecionado;
+            quantidadesSelecionadas[contador] = quantidade;
+            contador++;
+
+            // Pergunta se o usuário deseja adicionar mais pratos
+            System.out.print("Deseja adicionar outro prato? (s/n): ");
+            String resposta = scanner.nextLine();
+            if (!resposta.equalsIgnoreCase("s")) {
+                continuar = false; // Sai do loop
+            }
+        }
+
+        // Gerar um ID único para o pedido
+        int id = pedidos.length + 1;
+
+        // Encontrar o cliente correspondente ao nome da reserva
+        System.out.print("Digite o nome da reserva: ");
+        String nomeReserva = scanner.nextLine();
+        Clientes clienteSelecionado = null;
+        for (Clientes cliente : clientes) {
+            if (cliente.getNomeReserva().equals(nomeReserva)) {
+                clienteSelecionado = cliente;
+                break;
+            }
+        }
+
+        if (clienteSelecionado == null) {
+            System.out.println("Cliente não encontrado.");
+            return pedidos;
+        }
+
+        // Registrar o pedido para cada prato selecionado
+        for (int i = 0; i < contador; i++) {
+            Prato prato = pratosSelecionados[i];
+            int quantidade = quantidadesSelecionadas[i];
+            pedidos = GestorRestaurante.registarPedido(pedidos, id, mesaId, prato, quantidade, clienteSelecionado);
+
+            // Gravar log do pedido
+            String logMensagem = clienteSelecionado.getNomeReserva() + "," + prato.getNomePrato() + "," + (prato.getPrecoCusto() * quantidade);
+            gravarLog(logMensagem, dia);
+        }
+
+        System.out.println("Pedido registado com sucesso com " + contador + " pratos.");
+        return pedidos;
+    }
+
+    private static void gravarLog(String mensagem, int dia) {
+        String filename = "logs_dia_" + dia + ".txt";
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filename, true))) { // 'true' para anexar ao arquivo
+            bw.write(mensagem);
+            bw.newLine(); // Adiciona uma nova linha
+        } catch (IOException e) {
+            System.out.println("Erro ao gravar log: " + e.getMessage());
+        }
+    }
+    // Método para encontrar o índice de um prato pelo nome
+    private static int encontrarPratoIndex(Prato[] pratos, String nomePrato) {
+        for (int i = 0; i < pratos.length; i++) {
+            if (pratos[i].getNomePrato().equals(nomePrato)) {
+                return i; // Retorna o índice se o prato for encontrado
+            }
+        }
+        return -1; // Retorna -1 se não encontrar o prato
     }
 
 
