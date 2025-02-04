@@ -1,17 +1,14 @@
     import javax.swing.text.DefaultEditorKit;
-    import java.io.BufferedReader;
-    import java.io.File;
-    import java.io.FileReader;
-    import java.io.IOException;
+    import java.io.*;
     import java.util.Scanner;
 
     public class Main {
         public static void main(String[] args) {
             Definicoes definicoes = new Definicoes(
-                    "C:\\Users\\dbsob\\Desktop\\LP1\\RitoTech\\src\\",
-                    "C:\\Users\\dbsob\\Desktop\\LP1\\RitoTech\\src\\",
-                    "C:\\Users\\dbsob\\Desktop\\LP1\\RitoTech\\src\\",
-                    "C:\\Users\\dbsob\\Desktop\\LP1\\RitoTech\\src\\",
+                    "C:\\Users\\pjtug\\Desktop\\GIT_repos\\ProjetoLp1\\src\\",
+                    "C:\\Users\\pjtug\\Desktop\\GIT_repos\\ProjetoLp1\\src\\",
+                    "C:\\Users\\pjtug\\Desktop\\GIT_repos\\ProjetoLp1\\src\\",
+                    "C:\\Users\\pjtug\\Desktop\\GIT_repos\\ProjetoLp1\\src\\",
                     ",",
                     20,
                     2,
@@ -24,7 +21,7 @@
             Reservas[] reservas = LeitorReservas.lerReservasDoFicheiro(definicoes.getCaminhoReservas(), definicoes.getSeparadorFicheiros());
             Mesa[] mesas = LeitorMesas.lerMesasDoFicheiro(definicoes.getCaminhoMesas(), definicoes.getSeparadorFicheiros());
             Pedidos[] pedidos = new Pedidos[0];
-            int dia = 1;
+            int dia = 0;
 
             Scanner scanner = new Scanner(System.in);
             boolean running = true;
@@ -67,7 +64,6 @@
                         break;
                     case 5:
                         gerirDiaADia(definicoes, clientes, mesas, pratos, pedidos, dia);
-                        dia++;
                         break;
                     case 6:
                         sair();
@@ -120,7 +116,7 @@
             menuPratos(scanner, pratos, pratos.length);
         }
 
-        private static Pedidos[] registarPedidos(Scanner scanner, Pedidos[] pedidos, Mesa[] mesas, Prato[] pratos, Clientes[] clientes) {
+        private static Pedidos[] registarPedidos(Scanner scanner, Pedidos[] pedidos, Mesa[] mesas, Prato[] pratos, Clientes[] clientes, int dia) {
             System.out.println("\n--- Registar Pedido ---");
 
             // Listar todas as mesas com suas disponibilidades
@@ -185,8 +181,7 @@
             boolean continuar = true;
             while (continuar && contador < MAX_PRATOS) {
                 System.out.print("Digite o número do prato: ");
-                int pratoIndex = scanner.nextInt() - 1; // Subtrai 1 para obter o índice correto
-                scanner.nextLine(); // Consumir a nova linha
+                int pratoIndex = scanner.nextInt() - 1; scanner.nextLine(); // Consumir a nova linha
 
                 // Verificar se o índice do prato é válido
                 if (pratoIndex < 0 || pratoIndex >= pratos.length || !pratos[pratoIndex].isDisponivel()) {
@@ -237,6 +232,10 @@
                 Prato prato = pratosSelecionados[i];
                 int quantidade = quantidadesSelecionadas[i];
                 pedidos = GestorRestaurante.registarPedido(pedidos, id, mesaId, prato, quantidade, clienteSelecionado);
+
+                // Gravar log do pedido
+                String logMensagem = clienteSelecionado.getNomeReserva() + "," + prato.getNomePrato() + "," + (prato.getPrecoCusto() * quantidade);
+                gravarLog(logMensagem, dia); 
             }
 
             System.out.println("Pedido registado com sucesso com " + contador + " pratos.");
@@ -265,10 +264,22 @@
                     consultarLogs(dia);
                     break;
                 case 2:
+                    dia++;
                     iniciarDia(definicoes, clientes, mesas, pratos, pedidos, dia);
+
                     break;
                 default:
                     System.out.println("Opção inválida.");
+            }
+        }
+
+        private static void gravarLog(String mensagem, int dia) {
+            String filename = "logs_dia_" + dia + ".txt";
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(filename, true))) { // 'true' para anexar ao arquivo
+                bw.write(mensagem);
+                bw.newLine(); // Adiciona uma nova linha
+            } catch (IOException e) {
+                System.out.println("Erro ao gravar log: " + e.getMessage());
             }
         }
 
@@ -279,16 +290,51 @@
                 System.out.println("Nenhum log encontrado para o dia " + dia);
                 return;
             }
+
             try (BufferedReader br = new BufferedReader(new FileReader(file))) {
                 String linha;
                 System.out.println("Logs do dia " + dia + ":");
+                System.out.println("-------------------------------------------------");
+                System.out.printf("%-20s %-20s %-10s%n", "Cliente", "Prato", "Valor");
+                System.out.println("-------------------------------------------------");
+
                 while ((linha = br.readLine()) != null) {
-                    System.out.println(linha);
+                    String[] dados = linha.split(","); // Supondo que os dados estão separados por vírgula
+                    if (dados.length < 3) continue; // Ignorar linhas inválidas
+
+                    String cliente = dados[0];
+                    String nomePrato = dados[1];
+                    double valor = Double.parseDouble(dados[2]);
+
+                    // Exibir os dados formatados
+                    System.out.printf("%-20s %-20s %-10.2f%n", cliente, nomePrato, valor);
                 }
+                System.out.println("-------------------------------------------------");
             } catch (IOException e) {
-                System.out.println("Erro ao ler os logs.");
+                System.out.println("Erro ao ler os logs: " + e.getMessage());
             }
         }
+
+        private static int encontrarPratoIndex(Prato[] pratos, String nomePrato) {
+            for (int i = 0; i < pratos.length; i++) {
+                if (pratos[i].getNomePrato().equals(nomePrato)) {
+                    return i; // Retorna o índice se o prato for encontrado
+                }
+            }
+            return -1; // Retorna -1 se não encontrar o prato
+        }
+
+
+                private static int adicionarPrato(String[] pratosNomes, String nomePrato) {
+                    for (int i = 0; i < pratosNomes.length; i++) {
+                        if (pratosNomes[i] == null) { // Encontra um espaço vazio
+                            pratosNomes[i] = nomePrato; // Adiciona o nome do prato
+                            return i; // Retorna o índice do prato
+                        }
+                    }
+                    return -1; // Retorna -1 se não houver espaço
+                }
+
 
         private static void iniciarDia(Definicoes definicoes, Clientes[] clientes, Mesa[] mesas, Prato[] pratos, Pedidos[] pedidos, int dia) {
             Scanner scanner = new Scanner(System.in);
@@ -362,7 +408,7 @@
                         GestorRestaurante.atribuirMesa(clientes, mesas, nomeReservaMesa, numeroMesa, tempoAtual[0]);
                         break;
                     case 4:
-                        registarPedidos(scanner, pedidos, mesas, pratos, clientes);
+                        registarPedidos(scanner, pedidos, mesas, pratos, clientes, dia);
                         break;
                     case 5:
                         GestorRestaurante.listarClientes(clientes, mesas, tempoAtual[0]);
