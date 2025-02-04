@@ -1,13 +1,17 @@
     import javax.swing.text.DefaultEditorKit;
+    import java.io.BufferedReader;
+    import java.io.File;
+    import java.io.FileReader;
+    import java.io.IOException;
     import java.util.Scanner;
 
     public class Main {
         public static void main(String[] args) {
             Definicoes definicoes = new Definicoes(
-                    "C:\\Users\\pjtug\\Desktop\\GIT_repos\\ProjetoLp1\\src\\",
-                    "C:\\Users\\pjtug\\Desktop\\GIT_repos\\ProjetoLp1\\src\\",
-                    "C:\\Users\\pjtug\\Desktop\\GIT_repos\\ProjetoLp1\\src\\",
-                    "C:\\Users\\pjtug\\Desktop\\GIT_repos\\ProjetoLp1\\src\\",
+                    "C:\\Users\\dbsob\\Desktop\\LP1\\RitoTech\\src\\",
+                    "C:\\Users\\dbsob\\Desktop\\LP1\\RitoTech\\src\\",
+                    "C:\\Users\\dbsob\\Desktop\\LP1\\RitoTech\\src\\",
+                    "C:\\Users\\dbsob\\Desktop\\LP1\\RitoTech\\src\\",
                     ",",
                     20,
                     2,
@@ -20,7 +24,7 @@
             Reservas[] reservas = LeitorReservas.lerReservasDoFicheiro(definicoes.getCaminhoReservas(), definicoes.getSeparadorFicheiros());
             Mesa[] mesas = LeitorMesas.lerMesasDoFicheiro(definicoes.getCaminhoMesas(), definicoes.getSeparadorFicheiros());
             Pedidos[] pedidos = new Pedidos[0];
-            int dia = 0;
+            int dia = 1;
 
             Scanner scanner = new Scanner(System.in);
             boolean running = true;
@@ -31,9 +35,8 @@
                     "2. Gerir Pratos",
                     "3. Consultar Estatísticas",
                     "4. Configurações",
-                    "5. Iniciar Novo Dia",
-                    "6. Consultar Logs",
-                    "7. Sair"
+                    "5. Gerir Dia-a-Dia",
+                    "6. Sair"
             };
 
             while (running) {
@@ -63,14 +66,10 @@
                         configurarAplicacao(scanner, definicoes);
                         break;
                     case 5:
-                        dia = dia + 1;
-                        iniciarDia(definicoes, clientes, mesas, pratos, pedidos, dia);
-
+                        gerirDiaADia(definicoes, clientes, mesas, pratos, pedidos, dia);
+                        dia++;
                         break;
                     case 6:
-                        consultarLogs();
-                        break;
-                    case 7:
                         sair();
                         running = false;
                         break;
@@ -252,6 +251,44 @@
         private static void configurarAplicacao(Scanner scanner, Definicoes definicoes) {
             menuDefinicoes(scanner, definicoes);
         }
+        private static void gerirDiaADia(Definicoes definicoes, Clientes[] clientes, Mesa[] mesas, Prato[] pratos, Pedidos[] pedidos, int dia) {
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("\n--- Gerir Dia-a-Dia - Dia " + dia + " ---");
+            System.out.println("1. Consultar Logs do Dia");
+            System.out.println("2. Começar Novo Dia");
+            System.out.print("Escolha uma opção: ");
+            int escolha = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (escolha) {
+                case 1:
+                    consultarLogs(dia);
+                    break;
+                case 2:
+                    iniciarDia(definicoes, clientes, mesas, pratos, pedidos, dia);
+                    break;
+                default:
+                    System.out.println("Opção inválida.");
+            }
+        }
+
+        private static void consultarLogs(int dia) {
+            String filename = "logs_dia_" + dia + ".txt";
+            File file = new File(filename);
+            if (!file.exists()) {
+                System.out.println("Nenhum log encontrado para o dia " + dia);
+                return;
+            }
+            try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+                String linha;
+                System.out.println("Logs do dia " + dia + ":");
+                while ((linha = br.readLine()) != null) {
+                    System.out.println(linha);
+                }
+            } catch (IOException e) {
+                System.out.println("Erro ao ler os logs.");
+            }
+        }
 
         private static void iniciarDia(Definicoes definicoes, Clientes[] clientes, Mesa[] mesas, Prato[] pratos, Pedidos[] pedidos, int dia) {
             Scanner scanner = new Scanner(System.in);
@@ -353,9 +390,6 @@
             }
         }
 
-        private static void consultarLogs() {
-            System.out.println("Consulta de Logs ainda não implementada.");
-        }
 
         private static void sair() {
             System.out.println("Encerrando o sistema. Até logo!");
