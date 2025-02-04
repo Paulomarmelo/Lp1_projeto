@@ -5,7 +5,7 @@ public class Pedidos {
     private int quantidade;
     private Clientes cliente; // Alterado para o objeto Clientes
 
-    // Construtor
+
 
 
     public Pedidos(int id, int mesa, Prato prato, int quantidade, Clientes cliente) {
@@ -16,7 +16,7 @@ public class Pedidos {
         this.cliente = cliente;
     }
 
-    // Getters e Setters
+
     public int getId() {
         return id;
     }
@@ -50,11 +50,11 @@ public class Pedidos {
     }
 
     public Clientes getCliente() {
-        return cliente; // Método para obter o cliente
+        return cliente;
     }
 
     public void setCliente(Clientes cliente) {
-        this.cliente = cliente; // Método para definir o cliente
+        this.cliente = cliente;
     }
 
     @Override
